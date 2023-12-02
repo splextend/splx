@@ -71,7 +71,7 @@ class Reflection
                 $inline[] = $hintType;
             }
 
-            $inline[] = (
+            $inline[] = Misc::toCamelCase(
                 ($reflectionParameter->isPassedByReference() ? '&' : '') .
                 '$' .
                 $reflectionParameter->getName()

@@ -15,14 +15,20 @@ use Splx\IO\Stream;
  */
 abstract class StreamFilter extends php_user_filter
 {
+    /**
+     * @return void
+     */
     public function onCreate()
     {
-
+        $this->handleOpen();
     }
 
+    /**
+     * @return void
+     */
     public function onClose()
     {
-
+        $this->handleClose();
     }
 
     /**
@@ -62,4 +68,14 @@ abstract class StreamFilter extends php_user_filter
      * @return mixed
      */
     abstract function handle(Stream $inputStream, Stream $outputStream, &$consumed, $isEnd);
+
+    /**
+     * @return void
+     */
+    abstract function handleOpen();
+
+    /**
+     * @return void
+     */
+    abstract function handleClose();
 }

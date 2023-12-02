@@ -1,4 +1,5 @@
 <?php
+
 namespace Splx\IO;
 
 use Splx\Resource\AbstractResource;

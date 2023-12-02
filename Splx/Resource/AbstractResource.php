@@ -18,18 +18,52 @@ use BadMethodCallException;
  */
 abstract class AbstractResource extends Proto
 {
+    /**
+     * @var mixed
+     */
     protected $resource;
+
+    /**
+     * @var
+     */
     protected static $prefix;
+
+    /**
+     * @var array
+     */
     protected static $functions = [];
+
+    /**
+     * @var array
+     */
     protected static $staticFunctions = [];
+
+    /**
+     * @var array
+     */
     protected static $watchFalseFunctions = [];
 
+    /**
+     * @var array
+     */
     protected static $selfReturnMethods = [];
 
+    /**
+     * @var array
+     */
+    protected static $selfInstanceMethod = [];
 
+    /**
+     * @param $resource
+     * @return self
+     */
     public static function createFromResource($resource)
     {
+        $reflectionClass = new ReflectionClass(get_called_class());
+        $selfInstance = $reflectionClass->newInstanceWithoutConstructor();
+        $selfInstance->setResource($resource);
 
+        return $selfInstance;
     }
 
     /**
@@ -77,6 +111,10 @@ abstract class AbstractResource extends Proto
             Assert::throwLastErrorIfFalse(
                 in_array($function, static::$watchFalseFunctions)
             );
+        }
+
+        if (in_array($function, static::$selfInstanceMethod)) {
+            return self::createFromResource($value);
         }
 
         if ($thisis and in_array($function, static::$selfReturnMethods)) {
@@ -161,11 +199,11 @@ abstract class AbstractResource extends Proto
      * @return string
      * @throws ReflectionException
      */
-    public function exportCallPrototype()
+    public static function exportCallPrototype()
     {
         $methodsMap = [
-            ''       => self::$functions,
-            'static' => self::$staticFunctions
+            ''       => static::$functions,
+            'static' => static::$staticFunctions
         ];
 
         $doc = '/**' . PHP_EOL;
@@ -173,7 +211,7 @@ abstract class AbstractResource extends Proto
             foreach ($functions as $function) {
                 $doc .= ' * ' . Reflection::extractPrototypeDocFor(
                     $function,
-                    $this->functionToMethod($function),
+                    self::functionToMethod($function),
                     !!$prefix
                 ) . PHP_EOL;
             }

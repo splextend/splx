@@ -1,40 +1,80 @@
 <?php
-namespace PHP\Lang;
 
-use http\Exception\UnexpectedValueException;
+namespace Splx\Zip;
 
+use Splx\Resource\AbstractResource;
+
+/**
+ * Class Bz
+ *
+ * @category PHP Standard Library Extension
+ * @package  Splx
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @link     http://github.com/splextend/splextend
+ *
+ * @method flush()
+ * @method read($length)
+ * @method write($str, $length)
+ * @method close()
+ * @method errno()
+ * @method error()
+ * @method errstr()
+ * @method static compress($source, $blocksize, $workfactor)
+ * @method static decompress($source, $small)
+*/
 class Bz extends AbstractResource
 {
-	protected static $prefix = 'bz';
+    /**
+     * @var string
+     */
+    protected static $prefix = 'bz';
 
-    protected static $functions = array(
-    	'bzflush',
-    	'bzread',
-    	'bzwrite',
-        'bzclose'
-    );
+    /**
+     * @var string[]
+     */
+    protected static $functions = [
+        'bzflush',
+        'bzread',
+        'bzwrite',
+        'bzopen',
+        'bzclose',
+        'bzerrno',
+        'bzerror',
+        'bzerrstr'
+    ];
 
-    protected static $staticFunctions = array(
-    	'bzcompress',
-    	'bzdecompress'
-    );
+    /**
+     * @var string[]
+     */
+    protected static $staticFunctions = [
+        'bzcompress',
+        'bzdecompress'
+    ];
 
+    /**
+     * @var string[]
+     */
+    protected static $watchFalseFunctions = [
+        'bzopen',
+        'bzdecompress',
+        'bzflush',
+        'bzread',
+        'bzwrite'
+    ];
+
+    /**
+     * @param $file
+     * @param $mode
+     */
     public function __construct($file, $mode)
     {
-    	$file = self::safeValue($file);
-
-    	$resource = bzopen($file, $mode);
-    	if (false === $resource) {
-            throw new UnexpectedValueException(
-
-            );
-    	}
+        $resource = $this->open($file, $mode);
 
         $this->setResource($resource);
     }
 
     public function __destruct()
     {
-    	$this->close();
+        $this->close();
     }
 }
