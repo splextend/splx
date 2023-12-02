@@ -9,6 +9,7 @@ namespace Splx\Stream\StreamContext;
  * @package  Splx
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     http://github.com/splextend/splextend
+ *
  * @method getMethod()
  * @method getHeader()
  * @method getUserAgent()

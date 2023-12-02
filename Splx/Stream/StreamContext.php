@@ -13,13 +13,13 @@ use Splx\Core\Proto;
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     http://github.com/splextend/splextend
  *
- * @property Splx\Stream\StreamContext\Curl $curl
- * @property Splx\Stream\StreamContext\Ftp $ftp
- * @property Splx\Stream\StreamContext\Http $http
- * @property Splx\Stream\StreamContext\Phar $phar
- * @property Splx\Stream\StreamContext\Socket $socket
- * @property Splx\Stream\StreamContext\Ssl $ssl
- * @property Splx\Stream\StreamContext\Zip $zip
+ * @property StreamContext\Curl $curl
+ * @property StreamContext\Ftp $ftp
+ * @property StreamContext\Http $http
+ * @property StreamContext\Phar $phar
+ * @property StreamContext\Socket $socket
+ * @property StreamContext\Ssl $ssl
+ * @property StreamContext\Zip $zip
  */
 class StreamContext extends Proto
 {
@@ -68,7 +68,7 @@ class StreamContext extends Proto
             }
 
             $class = __NAMESPACE__ . '\\StreamContext\\' . ucfirst($wrapper);
-            $this->wrappers[$wrapper] = new $class;
+            $this->wrappers[$wrapper] = new $class($this);
         }
 
         return $this->wrappers[$wrapper];
@@ -80,7 +80,7 @@ class StreamContext extends Proto
     public function valueOf()
     {
         return stream_context_create(
-            array_map(function($wrapper){
+            array_map(function ($wrapper) {
                 return $wrapper->valueOf();
             }, $this->wrappers)
         );
@@ -93,10 +93,10 @@ class StreamContext extends Proto
     {
         $selfContext = get_class($this) . ' ';
 
-        if($this->wrappers) {
+        if ($this->wrappers) {
             return $selfContext . PHP_EOL . implode(PHP_EOL, array_map(function ($wrapper) {
                     return ' - ' . ((string) $wrapper);
-                }, $this->wrappers));
+            }, $this->wrappers));
         } else {
             return $selfContext . '(empty)';
         }

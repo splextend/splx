@@ -46,7 +46,7 @@ namespace Splx\Stream\StreamContext;
  * @method self setSNIServerName($value)
  * @method self setDisableCompression($value)
  * @method self setPeerFingerprint($value)
- * @method delPeerName string()
+ * @method delPeerName()
  * @method delVerifyPeer()
  * @method delVerifyPeerName()
  * @method delAllowSelfSigned()

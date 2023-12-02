@@ -3,6 +3,7 @@
 namespace Splx\Stream\StreamContext;
 
 use Splx\Core\Macros;
+use Splx\Stream\StreamContext;
 
 /**
  * Class AbstractContext
@@ -15,6 +16,27 @@ use Splx\Core\Macros;
 abstract class AbstractContext extends Macros
 {
     /**
+     * @var StreamContext
+     */
+    private $streamContext;
+
+    /**
+     * @param StreamContext $streamContext
+     */
+    public function __construct(StreamContext $streamContext)
+    {
+        $this->streamContext = $streamContext;
+    }
+
+    /**
+     * @return StreamContext
+     */
+    public function next()
+    {
+        return $this->streamContext;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
@@ -23,12 +45,12 @@ abstract class AbstractContext extends Macros
 
         if ($this->storage) {
             foreach ($this->storage as $key => $value) {
-                $inline[] = ' - ' . $key . ': ' . ((string) $value);
+                $inline[] = '   - ' . $key . ': ' . ((string) $value);
             }
         } else {
-            $inline[] = ' (empty)';
+            $inline[] = '   (empty)';
         }
 
-        return implode($inline);
+        return implode(PHP_EOL, $inline);
     }
 }
