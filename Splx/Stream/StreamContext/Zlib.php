@@ -10,16 +10,16 @@ namespace Splx\Stream\StreamContext;
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     http://github.com/splextend/splextend
  *
- * @method getPassword()
- * @method self setPassword($value)
- * @method delPassword()
+ * @method getLevel()
+ * @method self setLevel($value)
+ * @method delLevel()
  */
-class Zip extends AbstractContext
+class Zlib extends AbstractContext
 {
     /**
      * @var string[]
      */
     protected $keys = [
-        'password'
+        'level'
     ];
 }

@@ -1,11 +1,12 @@
 <?php
-namespace PHP\Lang;
+namespace Splx\IO;
 
 use UnexpectedValueException;
+use Splx\Resource\AbstractResource;
 
 class Stream extends AbstractResource
 {
-	protected $prefix = 'stream_';
+	protected static $prefix = 'stream_';
 
     protected static $functions = array(
         'stream_copy_to_stream',
@@ -31,7 +32,7 @@ class Stream extends AbstractResource
         'stream_supports_lock'
     );
 
-    protected $staticFunctions = array(
+    protected static $staticFunctions = array(
         'stream_filter_register',
         'stream_get_filters',
         'stream_get_transports',

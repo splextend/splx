@@ -19,7 +19,7 @@ use ReflectionFunctionAbstract;
 class Reflection
 {
     /**
-     * @param ReflectionParameter $parameter
+     * @param ReflectionParameter $reflectionParameter
      * @return false|string
      */
     public static function resolveArgumentHintType(ReflectionParameter $reflectionParameter)
@@ -29,10 +29,9 @@ class Reflection
         $lastVersionFeatures = (
                 method_exists($reflectionParameter, 'hasType')
             and $reflectionParameter->hasType()
-            and $type = $reflectionParameter->getType()
         );
 
-        if ($lastVersionFeatures) {
+        if ($lastVersionFeatures and $type = $reflectionParameter->getType()) {
             if ($type instanceof ReflectionUnionType) {
                 $hintType = implode('|', $type->getTypes());
             } elseif ($type instanceof ReflectionNamedType) {
@@ -55,7 +54,7 @@ class Reflection
      * @param ReflectionFunctionAbstract $reflectionFunction
      * @param $isStatic
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function extractArgumentPrototype(ReflectionFunctionAbstract $reflectionFunction, $isStatic = true)
     {
@@ -98,7 +97,7 @@ class Reflection
      * @param $name
      * @param $isStatic
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function extractPrototypeDocFor($function, $name, $isStatic = false)
     {

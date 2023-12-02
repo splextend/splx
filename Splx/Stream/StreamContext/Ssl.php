@@ -10,7 +10,7 @@ namespace Splx\Stream\StreamContext;
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     http://github.com/splextend/splextend
  *
- * @method getPeerName string()
+ * @method getPeerName()
  * @method getVerifyPeer()
  * @method getVerifyPeerName()
  * @method getAllowSelfSigned()
@@ -28,7 +28,7 @@ namespace Splx\Stream\StreamContext;
  * @method getSNIServerName()
  * @method getDisableCompression()
  * @method getPeerFingerprint()
- * @method self setPeerName string($value)
+ * @method self setPeerName($value)
  * @method self setVerifyPeer($value)
  * @method self setVerifyPeerName($value)
  * @method self setAllowSelfSigned($value)

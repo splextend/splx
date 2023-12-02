@@ -2,6 +2,11 @@
 
 namespace Splx\Core;
 
+use ArrayAccess;
+use ArrayIterator;
+use Serializable;
+use Countable;
+use IteratorAggregate;
 use BadMethodCallException;
 use OutOfBoundsException;
 
@@ -13,7 +18,7 @@ use OutOfBoundsException;
  * @license  https://opensource.org/licenses/MIT MIT
  * @link     http://github.com/splextend/splextend
  */
-class Macros extends Proto
+class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializable, Countable
 {
     /**
      * @var array
@@ -24,6 +29,113 @@ class Macros extends Proto
      * @var array
      */
     protected $keys = array();
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function get($key)
+    {
+        return $this->storage[$key];
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function set($key, $value)
+    {
+        $this->storage[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        return in_array($key, $this->keys, true);
+    }
+
+    /**
+     * @param $key
+     * @return $this
+     */
+    public function del($key)
+    {
+        unset($this->storage[$key]);
+
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return $this->has($key);
+    }
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->set($key, $value);
+    }
+
+    /**
+     * @param $key
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        $this->del($key);
+    }
+
+    /**
+     * @return ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->storage);
+    }
+
+    public function serialize()
+    {
+        return serialize($this->storage);
+    }
+
+    public function unserialize($data)
+    {
+        $unserialize = unserialize($data);
+        Assert::throwIfFalse(
+            $unserialize,
+            'Cannot unserialize given value'
+        );
+
+        $this->storage = $unserialize;
+    }
+
+    public function count()
+    {
+        return count($this->storage);
+    }
 
     /**
      * @param $method
@@ -37,7 +149,7 @@ class Macros extends Proto
         $key    = lcfirst($key);
         $key    = Misc::toSnakeCase($key);
 
-        if (!in_array($key, $this->keys)) {
+        if (!$this->has($key)) {
             throw new OutOfBoundsException(
                 sprintf(
                     "Property '%s' is not defined in '%s'",
@@ -48,15 +160,13 @@ class Macros extends Proto
         }
 
         if ('set' === $prefix) {
-            $this->storage[$key] = reset($arguments);
+            $value = reset($arguments);
 
-            return $this;
+            return $this->set($key, $value);
         } elseif ('get' === $prefix) {
-            return $this->storage[$key];
+            return $this->get($key);
         } elseif ('del' === $prefix) {
-            unset($this->storage[$key]);
-
-            return $this;
+            return $this->del($key);
         }
 
         throw new BadMethodCallException(

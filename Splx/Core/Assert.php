@@ -2,8 +2,6 @@
 
 namespace Splx\Core;
 
-use UnexpectedValueException;
-
 /**
  * Class Assert
  *

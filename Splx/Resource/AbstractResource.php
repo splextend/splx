@@ -27,6 +27,11 @@ abstract class AbstractResource extends Proto
     protected static $selfReturnMethods = [];
 
 
+    public static function createFromResource($resource)
+    {
+
+    }
+
     /**
      * @param $resource
      * @param $validate
@@ -66,7 +71,7 @@ abstract class AbstractResource extends Proto
             error_clear_last();
         }
 
-        $value = @call_user_func_array($function, $arguments);
+        $value = call_user_func_array($function, $arguments);
 
         if (false === $value) {
             Assert::throwLastErrorIfFalse(
@@ -116,8 +121,10 @@ abstract class AbstractResource extends Proto
         return Misc::toCamelCase($function);
     }
 
+
     /**
      * @param $method
+     * @param $caller
      * @return mixed
      */
     protected static function methodToFunction($method, $caller = null)
@@ -152,7 +159,7 @@ abstract class AbstractResource extends Proto
 
     /**
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function exportCallPrototype()
     {

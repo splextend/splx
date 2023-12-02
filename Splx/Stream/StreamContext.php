@@ -20,13 +20,20 @@ use Splx\Core\Proto;
  * @property StreamContext\Socket $socket
  * @property StreamContext\Ssl $ssl
  * @property StreamContext\Zip $zip
+ * @property StreamContext\Zlib $zlib
+ * @property StreamContext\MongoDB $mongodb
  */
 class StreamContext extends Proto
 {
-    /**\
+    /**
      * @var array
      */
     protected $wrappers = [];
+
+    /**
+     * @var array
+     */
+    protected $parameters = [];
 
     /*
      * @param $wrapper
@@ -43,6 +50,10 @@ class StreamContext extends Proto
      */
     public function isValid($wrapper)
     {
+        if ($wrapper === 'zlib') {
+            $wrapper = 'compress.zlib';
+        }
+
         $availWrappers = stream_get_wrappers();
 
         if (in_array($wrapper, $availWrappers, true)) {
@@ -54,7 +65,7 @@ class StreamContext extends Proto
 
     /**
      * @param $wrapper
-     * @return Splx\Stream\StreamContext\AbstractContext
+     * @return StreamContext\AbstractContext
      */
     public function __get($wrapper)
     {
@@ -74,6 +85,34 @@ class StreamContext extends Proto
         return $this->wrappers[$wrapper];
     }
 
+    public function setNotificationCallback(callable $callback)
+    {
+        $streamNotification = new StreamNotification;
+
+        $this->parameters['notification'] = function (
+            $notificationCode,
+            $severity,
+            $message,
+            $messageCode,
+            $bytesTransferred,
+            $bytesMax
+        ) use ($callback, $streamNotification) {
+            $streamNotificationClone = clone $streamNotification;
+
+            $streamNotification
+                ->setNotificationCode($notificationCode)
+                ->setSeverity($severity)
+                ->setMessage($message)
+                ->setMessageCode($messageCode)
+                ->setBytesTransferred($bytesTransferred)
+                ->setBytesMax($bytesMax);
+
+            call_user_func($callback, $streamNotificationClone);
+        };
+
+        return $this;
+    }
+
     /**
      * @return resource
      */
@@ -82,7 +121,8 @@ class StreamContext extends Proto
         return stream_context_create(
             array_map(function ($wrapper) {
                 return $wrapper->valueOf();
-            }, $this->wrappers)
+            }, $this->wrappers),
+            $this->parameters
         );
     }
 
