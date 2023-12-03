@@ -10,7 +10,7 @@ use Splx\Resource\AbstractResource;
  * @category PHP Standard Library Extension
  * @package  Splx
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/splextend/splextend
+ * @link     http://github.com/splextend/splx
  *
  * @method static decode($data, $maxDecodedLen)
  * @method static encode($data, $encoding, $level)

@@ -2,6 +2,7 @@
 
 namespace Splx\Core;
 
+use Exception;
 use ReflectionParameter;
 use ReflectionUnionType;
 use ReflectionNamedType;
@@ -14,7 +15,7 @@ use ReflectionFunctionAbstract;
  * @category PHP Standard Library Extension
  * @package  Splx
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/splextend/splextend
+ * @link     http://github.com/splextend/splx
  */
 class Reflection
 {
@@ -101,8 +102,12 @@ class Reflection
      */
     public static function extractPrototypeDocFor($function, $name, $isStatic = false)
     {
-        $reflectionFunction = new ReflectionFunction($function);
-        $export = self::extractArgumentPrototype($reflectionFunction, $isStatic);
+        try {
+            $reflectionFunction = new ReflectionFunction($function);
+            $export = self::extractArgumentPrototype($reflectionFunction, $isStatic);
+        } catch (Exception $e) {
+            $export = [];
+        }
 
         return (
             '@method ' .

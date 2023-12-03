@@ -11,7 +11,7 @@ use Splx\Core\Proto;
  * @category PHP Standard Library Extension
  * @package  Splx
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/splextend/splextend
+ * @link     http://github.com/splextend/splx
  *
  * @property StreamContext\Curl $curl
  * @property StreamContext\Ftp $ftp

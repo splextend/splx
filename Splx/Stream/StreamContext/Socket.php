@@ -8,7 +8,7 @@ namespace Splx\Stream\StreamContext;
  * @category PHP Standard Library Extension
  * @package  Splx
  * @license  https://opensource.org/licenses/MIT MIT
- * @link     http://github.com/splextend/splextend
+ * @link     http://github.com/splextend/splx
  *
  * @method getBindto()
  * @method getBacklog()
