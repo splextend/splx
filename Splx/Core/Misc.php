@@ -16,25 +16,25 @@ class Misc
      * @param $string
      * @return array|string|string[]|null
      */
-    public static function toSnakeCase($string)
+    public static function toSnakeCase($camelCaseString)
     {
-        Assert::validateInstance($string, 'string');
+        Assert::validateInstance($camelCaseString, 'string');
 
         return preg_replace_callback('/([a-z])([A-Z])/', function ($match) {
             return $match[1] . '_' . strtolower($match[2]);
-        }, $string);
+        }, $camelCaseString);
     }
 
     /**
      * @param $string
      * @return array|string|string[]|null
      */
-    public static function toCamelCase($string)
+    public static function toCamelCase($snakeCaseString)
     {
-        Assert::validateInstance($string, 'string');
+        Assert::validateInstance($snakeCaseString, 'string');
 
         return preg_replace_callback('/([a-z])_([a-z])/', function ($match) {
             return $match[1] . strtoupper($match[2]);
-        }, $string);
+        }, $snakeCaseString);
     }
 }

@@ -12,19 +12,16 @@ namespace Splx\Stream\StreamContext;
  *
  * @method getBindto()
  * @method getBacklog()
- * @method getIpv6_v6only()
  * @method getSoReuseport()
  * @method getSoBroadcast()
  * @method getTcpNodelay()
  * @method self setBindto($value)
  * @method self setBacklog($value)
- * @method self setIpv6_v6only($value)
  * @method self setSoReuseport($value)
  * @method self setSoBroadcast($value)
  * @method self setTcpNodelay($value)
  * @method delBindto()
  * @method delBacklog()
- * @method delIpv6_v6only()
  * @method delSoReuseport()
  * @method delSoBroadcast()
  * @method delTcpNodelay()
@@ -42,4 +39,29 @@ class Socket extends AbstractContext
         'so_broadcast',
         'tcp_nodelay'
     ];
+
+    /**
+     * @param $value
+     * @return Socket
+     */
+    public function setIpV6Only($value)
+    {
+        return $this->set('ipv6_v6only', $value);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getIpV6Only()
+    {
+        return $this->get('ipv6_v6only');
+    }
+
+    /**
+     * @return Socket
+     */
+    public function delIpV6Only()
+    {
+        return $this->del('ipv6_v6only');
+    }
 }

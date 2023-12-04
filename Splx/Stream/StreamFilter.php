@@ -67,15 +67,15 @@ abstract class StreamFilter extends php_user_filter
      * @param $isEnd
      * @return mixed
      */
-    abstract function handle(Stream $inputStream, Stream $outputStream, &$consumed, $isEnd);
+    abstract public function handle(Stream $inputStream, Stream $outputStream, &$consumed, $isEnd);
 
     /**
      * @return void
      */
-    abstract function handleOpen();
+    abstract public function handleOpen();
 
     /**
      * @return void
      */
-    abstract function handleClose();
+    abstract public function handleClose();
 }

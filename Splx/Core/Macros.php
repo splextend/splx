@@ -32,11 +32,13 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
 
     /**
      * @param $key
-     * @return mixed
+     * @return mixed|void
      */
     public function get($key)
     {
-        return $this->storage[$key];
+        if (isset($this->storage[$key])) {
+            return $this->storage[$key];
+        }
     }
 
     /**

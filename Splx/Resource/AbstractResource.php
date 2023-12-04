@@ -6,7 +6,9 @@ use Splx\Core\Proto;
 use Splx\Core\Misc;
 use Splx\Core\Reflection;
 use Splx\Core\Assert;
+use ReflectionClass;
 use BadMethodCallException;
+use BadFunctionCallException;
 
 /**
  * Class AbstractResource
@@ -57,11 +59,11 @@ abstract class AbstractResource extends Proto
      * @param $resource
      * @return self
      */
-    public static function createFromResource($resource)
+    public static function createFromResource($resource, $validate = 'resource')
     {
         $reflectionClass = new ReflectionClass(get_called_class());
         $selfInstance = $reflectionClass->newInstanceWithoutConstructor();
-        $selfInstance->setResource($resource);
+        $selfInstance->setResource($resource, $validate);
 
         return $selfInstance;
     }
@@ -99,6 +101,17 @@ abstract class AbstractResource extends Proto
     private static function resolveFunctionCall($method, array $arguments = [], $thisis = null)
     {
         $function = self::methodToFunction($method);
+        if (false === function_exists($function)) {
+            throw new BadFunctionCallException(
+                sprintf(
+                    "Unable to call undefined function '%s' associated with method '%s'. " .
+                    "Check documentation and PHP version",
+                    $function,
+                    $method
+                )
+            );
+        }
+
         $arguments = array_map('self::safeValue', $arguments);
 
         if (function_exists('error_clear_last')) {

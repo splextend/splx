@@ -19,13 +19,10 @@ namespace Splx\Stream\StreamContext;
  * @method getLocalCert()
  * @method getLocalPk()
  * @method getPassphrase()
- * @method getCNMatch()
  * @method getVerifyDepth()
  * @method getCiphers()
  * @method getCapturePeerCert()
  * @method getCapturePeerCertChain()
- * @method getSNIEnabled()
- * @method getSNIServerName()
  * @method getDisableCompression()
  * @method getPeerFingerprint()
  * @method self setPeerName($value)
@@ -37,13 +34,10 @@ namespace Splx\Stream\StreamContext;
  * @method self setLocalCert($value)
  * @method self setLocalPk($value)
  * @method self setPassphrase($value)
- * @method self setCNMatch($value)
  * @method self setVerifyDepth($value)
  * @method self setCiphers($value)
  * @method self setCapturePeerCert($value)
  * @method self setCapturePeerCertChain($value)
- * @method self setSNIEnabled($value)
- * @method self setSNIServerName($value)
  * @method self setDisableCompression($value)
  * @method self setPeerFingerprint($value)
  * @method delPeerName()
@@ -55,13 +49,10 @@ namespace Splx\Stream\StreamContext;
  * @method delLocalCert()
  * @method delLocalPk()
  * @method delPassphrase()
- * @method delCNMatch()
  * @method delVerifyDepth()
  * @method delCiphers()
  * @method delCapturePeerCert()
  * @method delCapturePeerCertChain()
- * @method delSNIEnabled()
- * @method delSNIServerName()
  * @method delDisableCompression()
  * @method delPeerFingerprint()
 */
@@ -90,4 +81,79 @@ class Ssl extends AbstractContext
         'disable_compression',
         'peer_fingerprint'
     ];
+
+    /**
+     * @param $value
+     * @return Ssl
+     */
+    public function setCNMatch($value)
+    {
+        return $this->set('CN_match', $value);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCNMatch()
+    {
+        return $this->get('CN_match');
+    }
+
+    /**
+     * @return Ssl
+     */
+    public function delCNMatch()
+    {
+        return $this->del('CN_match');
+    }
+
+    /**
+     * @param $value
+     * @return Ssl
+     */
+    public function setSNIEnabled($value)
+    {
+        return $this->set('SNI_enabled', $value);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getSNIEnabled()
+    {
+        return $this->get('SNI_enabled');
+    }
+
+    /**
+     * @return Ssl
+     */
+    public function delSNIEnabled()
+    {
+        return $this->del('SNI_enabled');
+    }
+
+    /**
+     * @param $value
+     * @return Ssl
+     */
+    public function setSNIServerName($value)
+    {
+        return $this->set('SNI_server_name', $value);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getSNIServerName()
+    {
+        return $this->get('SNI_server_name');
+    }
+
+    /**
+     * @return Ssl
+     */
+    public function delSNIServerName()
+    {
+        return $this->del('SNI_server_name');
+    }
 }
