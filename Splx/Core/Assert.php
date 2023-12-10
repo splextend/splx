@@ -44,13 +44,13 @@ class Assert
             if (!$lastError) {
                 $lastError = array (
                     'message' => $message,
-                    'code'    => $code
+                    'type'    => $code
                 );
             }
 
             throw new $class(
                 $lastError['message'],
-                $lastError['code']
+                $lastError['type']
             );
         }
     }

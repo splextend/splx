@@ -16,6 +16,7 @@ class File extends AbstractResource
 
     protected static $functions = array(
 		'fclose',
+        'fdatasync',
 		'feof',
 		'fflush',
 		'fgetc',
@@ -32,10 +33,15 @@ class File extends AbstractResource
 		'fstat',
 		'ftell',
 		'ftruncate',
-		'fwrite'
+		'fwrite',
+        'rewind'
 	);
 
     protected static $staticFunctions = array();
+
+    protected static $watchFalseFunctions = [
+        'fgets'
+    ];
 
     /**
      * @return self
@@ -62,6 +68,8 @@ class File extends AbstractResource
 
 	public function __destruct()
 	{
-		$this->close();
+        if ('Unknown' !== get_resource_type($this->resource)){
+            $this->close();
+        }
 	}
 }

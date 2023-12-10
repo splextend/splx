@@ -112,7 +112,9 @@ abstract class AbstractResource extends Proto
             );
         }
 
-        $arguments = array_map('self::safeValue', $arguments);
+        foreach ($arguments as $index => $argument) {
+            $arguments[$index] = Proto::safeValue($argument);
+        }
 
         if (function_exists('error_clear_last')) {
             error_clear_last();
@@ -122,7 +124,7 @@ abstract class AbstractResource extends Proto
 
         if (false === $value) {
             Assert::throwLastErrorIfFalse(
-                in_array($function, static::$watchFalseFunctions)
+                !in_array($function, static::$watchFalseFunctions)
             );
         }
 

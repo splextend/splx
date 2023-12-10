@@ -38,7 +38,9 @@ class Socket extends AbstractResource
      * @var array
      */
     protected static $staticFunctions = [
-        'socket_clear_error'
+        'socket_clear_error',
+        'socket_create',
+        'socket_create_listen'
     ];
 
     /**
@@ -48,7 +50,9 @@ class Socket extends AbstractResource
         'socket_accept',
         'socket_atmark',
         'socket_bind',
-        'socket_connect'
+        'socket_connect',
+        'socket_create',
+        'socket_create_listen'
     ];
 
     private function __construct($resource)
@@ -58,22 +62,17 @@ class Socket extends AbstractResource
 
     public static function create($domain, $type, $protocol)
     {
-        $resource = socket_create(
-            $domain,
-            $type,
-            $protocol
+        $resource = self::__callStatic(
+            'create',
+            [$domain, $type, $protocol]
         );
-
-        Assert::throwLastErrorIfFalse($resource);
 
         return new self($resource);
     }
 
     public static function createListen($port, $backlog = 128)
     {
-        $resource = socket_create_listen($port, $backlog);
-
-        Assert::throwLastErrorIfFalse($resource);
+        $resource = self::__callStatic('createListen', [$port, $backlog]);
 
         return new self($resource);
     }
