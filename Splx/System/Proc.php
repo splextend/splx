@@ -66,12 +66,12 @@ class Proc extends AbstractResource
 
     public function __construct($command, $cwd = null, array $envVars = null, array $options = null)
     {
-        $pipes = array();
-        $descriptorSpec = array(
+        $pipes = [];
+        $descriptorSpec = [
             0 => array("pipe", "r"),
             1 => array("pipe", "w"),
             2 => array("pipe", "r")
-        );
+        ];
 
         $resource = self::__callStatic(
             'open',

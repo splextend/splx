@@ -9,6 +9,7 @@ use Countable;
 use IteratorAggregate;
 use BadMethodCallException;
 use OutOfBoundsException;
+use LogicException;
 
 /**
  * Class Transport
@@ -29,6 +30,13 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
      * @var array
      */
     protected $keys = array();
+
+    public function __construct(array $storage = [])
+    {
+        foreach ($storage as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
 
     /**
      * @param $key

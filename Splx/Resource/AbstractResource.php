@@ -61,6 +61,8 @@ abstract class AbstractResource extends Proto
      */
     public static function createFromResource($resource, $validate = 'resource')
     {
+        $resource = Proto::safeValue($resource);
+
         $reflectionClass = new ReflectionClass(get_called_class());
         $selfInstance = $reflectionClass->newInstanceWithoutConstructor();
         $selfInstance->setResource($resource, $validate);
@@ -144,7 +146,7 @@ abstract class AbstractResource extends Proto
      * @param array $arguments
      * @return mixed
      */
-    public static function __callStatic($method, array $arguments)
+    public static function __callStatic($method, array $arguments = [])
     {
         return self::resolveFunctionCall($method, $arguments);
     }
@@ -154,7 +156,7 @@ abstract class AbstractResource extends Proto
      * @param array $arguments
      * @return mixed
      */
-    public function __call($method, array $arguments)
+    public function __call($method, array $arguments = [])
     {
         array_unshift($arguments, $this->resource);
 

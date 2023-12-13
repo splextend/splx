@@ -37,9 +37,16 @@ class File extends AbstractResource
         'rewind'
 	);
 
-    protected static $staticFunctions = array();
+    protected static $staticFunctions = [
+        'tmpfile',
+        'tempnam',
+        'fopen',
+    ];
 
     protected static $watchFalseFunctions = [
+        'tmpfile',
+        'tempnam',
+        'fopen',
         'fgets'
     ];
 
@@ -47,21 +54,39 @@ class File extends AbstractResource
      * @return self
      * @throws ResourceException
      */
-    public static function tmp()
+    public static function tmpfile()
     {
+        $resource = self::__callStatic('tmpfile');
+
         $instance = new static;
-        $instance->setResource(@tmpfile());
+        $instance->setResource($resource);
 
         return $instance;
     }
+
+    public static function tempnam($directory, $prefix = null)
+    {
+        if (func_num_args() === 1 and null === $prefix) {
+            $prefix = array_merge(range('A','Z'), range('a', 'z'), range('0', '9'));
+            $prefix = implode($prefix);
+            $prefix = str_shuffle($prefix);
+            $prefix = substr($prefix, 0, 8);
+        }
+
+        $filename = self::__callStatic('tempnam', [$directory, $prefix]);
+
+        return $filename;
+    }
+
 	public static function open($filename, $mode = self::READ_BINARY, StreamContext $context = null, $useIncludePath = false)
 	{
-		if ($context) {
-			$context = $context->valueOf();
-		}
+        $resource = self::__callStatic(
+            'fopen',
+            [$filename, $mode, $useIncludePath, $context]
+        );
 
         $instance = new static;
-		$instance->setResource(@fopen($filename, $mode, $useIncludePath, $context));
+		$instance->setResource($resource);
 
         return $instance;
 	}

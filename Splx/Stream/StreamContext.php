@@ -87,8 +87,6 @@ class StreamContext extends Proto
 
     public function setNotificationCallback(callable $callback)
     {
-        $streamNotification = new StreamNotification;
-
         $this->parameters['notification'] = function (
             $notificationCode,
             $severity,
@@ -96,16 +94,15 @@ class StreamContext extends Proto
             $messageCode,
             $bytesTransferred,
             $bytesMax
-        ) use ($callback, $streamNotification) {
-            $streamNotificationClone = clone $streamNotification;
-
-            $streamNotification
-                ->setNotificationCode($notificationCode)
-                ->setSeverity($severity)
-                ->setMessage($message)
-                ->setMessageCode($messageCode)
-                ->setBytesTransferred($bytesTransferred)
-                ->setBytesMax($bytesMax);
+        ) use ($callback) {
+            $streamNotificationClone = new StreamNotification([
+                'notification_code' => $notificationCode,
+                'severity' => $severity,
+                'message' => $message,
+                'message_code' => $messageCode,
+                'bytes_transferred' => $bytesTransferred,
+                'bytes_max' => $bytesMax
+            ]);
 
             call_user_func($callback, $streamNotificationClone);
         };

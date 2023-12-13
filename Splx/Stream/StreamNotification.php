@@ -2,7 +2,7 @@
 
 namespace Splx\Stream;
 
-use Splx\Core\Macros;
+use Splx\Core\ReadonlyMacros;
 
 /**
  * Class StreamNotification
@@ -32,7 +32,7 @@ use Splx\Core\Macros;
  * @method delBytesMax()
  */
 
-class StreamNotification extends Macros
+class StreamNotification extends ReadonlyMacros
 {
     protected $keys = [
         'notification_code',
