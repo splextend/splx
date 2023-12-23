@@ -64,8 +64,12 @@ class File extends AbstractResource
         return $instance;
     }
 
-    public static function tempnam($directory, $prefix = null)
+    public static function tempnam($directory = null, $prefix = null)
     {
+        if (func_num_args() === 0 and null === $directory) {
+            $directory = sys_get_temp_dir();
+        }
+
         if (func_num_args() === 1 and null === $prefix) {
             $prefix = array_merge(range('A','Z'), range('a', 'z'), range('0', '9'));
             $prefix = implode($prefix);
@@ -78,17 +82,14 @@ class File extends AbstractResource
         return $filename;
     }
 
-	public static function open($filename, $mode = self::READ_BINARY, StreamContext $context = null, $useIncludePath = false)
+	public function __construct($filename, $mode = self::READ_BINARY, StreamContext $context = null, $useIncludePath = false)
 	{
         $resource = self::__callStatic(
             'fopen',
             [$filename, $mode, $useIncludePath, $context]
         );
 
-        $instance = new static;
-		$instance->setResource($resource);
-
-        return $instance;
+		$this->setResource($resource);
 	}
 
 	public function __destruct()

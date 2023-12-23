@@ -3,8 +3,9 @@
 namespace Splx\IO;
 
 use UnexpectedValueException;
+use Splx\Resource\AbstractResource;
 
-class FileInfo extends \Splx\Resource\AbstractResource
+class FileInfo extends AbstractResource
 {
     protected static $prefix = 'file';
 
@@ -45,7 +46,7 @@ class FileInfo extends \Splx\Resource\AbstractResource
 
     public function __construct($filepath)
     {
-        if (realpath($filepath) and !(is_file($filepath) or is_dir($filepath))) {
+        if (realpath($filepath) and (is_file($filepath) or is_dir($filepath))) {
             $this->setResource($filepath, 'string');
         }
 

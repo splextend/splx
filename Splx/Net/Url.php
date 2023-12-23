@@ -40,6 +40,9 @@ use Splx\Core\Macros;
  */
 class Url extends Macros
 {
+    /**
+     * @var string[]
+     */
     protected $keys = [
         'scheme',
         'user',
@@ -51,6 +54,9 @@ class Url extends Macros
         'fragment'
     ];
 
+    /**
+     * @param $url
+     */
     public function __construct($url = null)
     {
         if (is_null($url)) {
@@ -76,11 +82,17 @@ class Url extends Macros
         }
     }
 
+    /**
+     * @return string
+     */
     public function valueOf()
     {
         return $this->__toString();
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $url = '';

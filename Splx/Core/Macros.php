@@ -24,7 +24,9 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
     /**
      * @var array
      */
-    protected $storage = array();
+    protected $storage = [];
+
+    protected $watchers = [];
 
     /**
      * @var array
@@ -36,6 +38,34 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
         foreach ($storage as $key => $value) {
             $this->set($key, $value);
         }
+    }
+
+    public function watch(callable $callback, $key = null)
+    {
+        if (null === $key) {
+            $key = '*';
+        }
+
+        $this->watchers[] = $callback;
+
+        return $this;
+    }
+
+    public function unwatch($watcher, $key = null)
+    {
+        if (null === $key) {
+            $key = '*';
+        }
+
+        foreach ($this->watchers as $index => $callback) {
+            if ($callback === $watcher) {
+                unset($this->watchers[$index]);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -45,4 +45,19 @@ class Ftp extends AbstractResource
     ftp_ssl_connect — Устанавливает соединение с FTP-сервером через SSL
     ftp_systype
      */
+
+    public function __construct($hostname, $isSsl = true, $port = 21, $timeout = 90)
+    {
+        $resource = self::__callStatic(
+            $isSsl ? 'ftp_ssl_connect' : 'ftp_connect',
+            [$hostname, $port, $timeout]
+        );
+
+        $this->setResource($resource, ['resource', 'FTP\Connection']);
+    }
+
+    public function __destruct()
+    {
+        $this->close();
+    }
 }

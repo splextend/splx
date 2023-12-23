@@ -37,4 +37,15 @@ class Misc
             return $match[1] . strtoupper($match[2]);
         }, $snakeCaseString);
     }
+
+    public static function toTrainCase($snakeCaseString)
+    {
+        Assert::validateInstance($snakeCaseString, 'string');
+
+        $snakeCaseString = ucfirst($snakeCaseString);
+
+        return preg_replace_callback('/([a-z])_([a-z])/', function ($match) {
+            return $match[1] . '-' . strtoupper($match[2]);
+        }, $snakeCaseString);
+    }
 }

@@ -2,10 +2,24 @@
 
 namespace Splx\Core;
 
+/**
+ * Class ReadonlyMacros
+ *
+ * @category PHP Standard Library Extension
+ * @package  Splx
+ * @license  https://opensource.org/licenses/MIT MIT
+ * @link     http://github.com/splextend/splx
+ */
 class ReadonlyMacros extends Macros
 {
+    /**
+     * @var false
+     */
     private $writeable = false;
 
+    /**
+     * @param array $storage
+     */
     public function __construct(array $storage = [])
     {
         $this->writeable = true;
@@ -13,6 +27,9 @@ class ReadonlyMacros extends Macros
         $this->writeable = false;
     }
 
+    /**
+     * @return mixed
+     */
     private function decline()
     {
         throw new LogicException(
@@ -20,6 +37,11 @@ class ReadonlyMacros extends Macros
         );
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @return void
+     */
     public function set($key, $value)
     {
         if (false === $this->writeable) {
@@ -27,6 +49,10 @@ class ReadonlyMacros extends Macros
         }
     }
 
+    /**
+     * @param $key
+     * @return void
+     */
     public function del($key)
     {
         $this->decline();
