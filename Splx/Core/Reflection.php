@@ -7,6 +7,7 @@ use ReflectionParameter;
 use ReflectionUnionType;
 use ReflectionNamedType;
 use ReflectionFunction;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 
 /**
@@ -98,7 +99,6 @@ class Reflection
      * @param $name
      * @param $isStatic
      * @return string
-     * @throws ReflectionException
      */
     public static function extractPrototypeDocFor($function, $name, $isStatic = false)
     {

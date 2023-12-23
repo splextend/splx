@@ -2,6 +2,8 @@
 
 namespace Splx\Core;
 
+use LogicException;
+
 /**
  * Class ReadonlyMacros
  *
@@ -13,9 +15,9 @@ namespace Splx\Core;
 class ReadonlyMacros extends Macros
 {
     /**
-     * @var false
+     * @var
      */
-    private $writeable = false;
+    private $writeable;
 
     /**
      * @param array $storage

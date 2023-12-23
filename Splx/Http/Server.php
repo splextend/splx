@@ -56,8 +56,8 @@ class Server extends Macros
 
     public function getResponse()
     {
-        if (is_null($this->request)) {
-            $this->request = new Response();
+        if (is_null($this->response)) {
+            $this->response = new Response();
         }
 
         return $this->response;

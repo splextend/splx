@@ -9,7 +9,6 @@ use Countable;
 use IteratorAggregate;
 use BadMethodCallException;
 use OutOfBoundsException;
-use LogicException;
 
 /**
  * Class Transport
@@ -33,6 +32,9 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
      */
     protected $keys = array();
 
+    /**
+     * @param array $storage
+     */
     public function __construct(array $storage = [])
     {
         foreach ($storage as $key => $value) {
@@ -40,24 +42,69 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
         }
     }
 
+    /**
+     * @param $action
+     * @param $key
+     * @param $value
+     * @param $oldValue
+     * @return void
+     */
+    public function resolveWatch($action, $key, $value, $oldValue = null)
+    {
+        if ($this->watchers) {
+            foreach (['*', $key] as $eventKey => $callbackStack) {
+                if (isset($this->watchers[$eventKey])) {
+                    foreach ($this->watchers[$eventKey] as $callback) {
+                        call_user_func(
+                            $callback,
+                            $this,
+                            $action,
+                            $key,
+                            $value,
+                            $oldValue
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param callable $callback
+     * @param $key
+     * @return $this
+     */
     public function watch(callable $callback, $key = null)
     {
         if (null === $key) {
             $key = '*';
         }
 
-        $this->watchers[] = $callback;
+        if (!isset($this->watchers[$key])) {
+            $this->watchers[$key] = [];
+        }
+
+        $this->watchers[$key][] = $callback;
 
         return $this;
     }
 
+    /**
+     * @param $watcher
+     * @param $key
+     * @return bool
+     */
     public function unwatch($watcher, $key = null)
     {
         if (null === $key) {
             $key = '*';
         }
 
-        foreach ($this->watchers as $index => $callback) {
+        if (!isset($this->watchers[$key])) {
+            return false;
+        }
+
+        foreach ($this->watchers[$key] as $index => $callback) {
             if ($callback === $watcher) {
                 unset($this->watchers[$index]);
 
@@ -74,9 +121,14 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
      */
     public function get($key)
     {
+        $value = null;
         if (isset($this->storage[$key])) {
-            return $this->storage[$key];
+            $value = $this->storage[$key];
         }
+
+        $this->resolveWatch(__FUNCTION__, $key, $value);
+
+        return $value;
     }
 
     /**
@@ -86,7 +138,14 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
      */
     public function set($key, $value)
     {
+        $oldValue = (
+            isset($this->storage[$key])
+                ? $this->storage[$key]
+                : null
+        );
+
         $this->storage[$key] = $value;
+        $this->resolveWatch(__FUNCTION__, $key, $value, $oldValue);
 
         return $this;
     }
@@ -106,7 +165,14 @@ class Macros extends Proto implements ArrayAccess, IteratorAggregate, Serializab
      */
     public function del($key)
     {
+        $oldValue = (
+            isset($this->storage[$key])
+            ? $this->storage[$key]
+            : null
+        );
+
         unset($this->storage[$key]);
+        $this->resolveWatch(__FUNCTION__, $key, null, $oldValue);
 
         return $this;
     }

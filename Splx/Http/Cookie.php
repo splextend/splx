@@ -21,7 +21,7 @@ class Cookie extends Macros
     public function __toString()
     {
         $cookie = [
-            $this->getName() . '=' . $this->getValue();
+            $this->getName() . '=' . $this->getValue()
         ];
 
         foreach ($this as $key => $value) {

@@ -15,6 +15,10 @@ class CookieList extends Proto implements ArrayAccess, IteratorAggregate, Counta
      */
     private $cookies = [];
 
+    /**
+     * @param Cookie $cookie
+     * @return $this
+     */
     public function push(Cookie $cookie)
     {
         $name = $cookie->getName();
@@ -23,45 +27,87 @@ class CookieList extends Proto implements ArrayAccess, IteratorAggregate, Counta
         return $this;
     }
 
-    public function create($name)
+    /**
+     * @param $name
+     * @param $value
+     * @return Cookie
+     */
+    public function create($name, $value = null)
     {
-        $cookie = new Cookie();
-        $cookie->setName();
-        $this->push($cookie);
+        if (isset($this->cookies[$name])) {
+            $cookie = $this->cookies[$name];
+        } else {
+            $cookie = new Cookie();
+            $this->push($cookie);
+        }
+
+        $cookie->setName($name);
+        $cookie->setValue($value);
 
         return $cookie;
     }
 
+    /**
+     * @return ArrayIterator
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->cookies);
     }
 
-    public function offsetExists($offset)
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function offsetExists($name)
     {
-        // TODO: Implement offsetExists() method.
+        return isset($this->cookies[$name]);
     }
 
-    public function offsetGet($offset)
+    /**
+     * @param $name
+     * @return Cookie|void
+     */
+    public function offsetGet($name)
     {
-        // TODO: Implement offsetGet() method.
+        if (isset($this->cookies[$name])) {
+            return $this->cookies[$name];
+        }
     }
 
-    public function offsetSet($offset, $value)
+    /**
+     * @param $name
+     * @param $value
+     * @return void
+     */
+    public function offsetSet($name, $value)
     {
-        // TODO: Implement offsetSet() method.
+        $this->create(
+            $name,
+            $value
+        );
     }
 
-    public function offsetUnset($offset)
+    /**
+     * @param $name
+     * @return void
+     */
+    public function offsetUnset($name)
     {
-        // TODO: Implement offsetUnset() method.
+        unset($this->cookies[$name]);
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return count($this->cookies);
     }
 
+    /**
+     * @return Cookie[]
+     */
     public function valueOf()
     {
         return $this->cookies;
